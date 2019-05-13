@@ -1,130 +1,86 @@
-<template lang='pug'>
-  .datepicker__wrapper(v-if='show' v-on-click-outside='clickOutside' @blur="clickOutside")
-    .datepicker__close-button.-hide-on-desktop(v-if='isOpen' @click='hideDatepicker') ＋
-    .datepicker__dummy-wrapper(  :class="`${isOpen ? 'datepicker__dummy-wrapper--is-active' : ''}` ")
-      date-input(
-        :i18n="i18n"
-        :input-date="formatDate(checkIn)"
-        input-date-type="check-in"
-        :is-open="isOpen"
-        :show-datepicker="showDatepicker"
-        :hide-datepicker="hideDatepicker"
-        :toggle-datepicker="toggleDatepicker"
-        :single-day-selection="singleDaySelection"
-      )
-      date-input(
-        v-if="!singleDaySelection"
-        :i18n="i18n"
-        :input-date="formatDate(checkOut)"
-        input-date-type="check-out"
-        :is-open="isOpen"
-        :showDatepicker="showDatepicker"
-        :hide-datepicker="hideDatepicker"
-        :toggle-datepicker="toggleDatepicker"
-        :single-day-selection="singleDaySelection"
-      )
-    .datepicker__clear-button(tabindex="0" @click='clearSelection' v-if="showClearSelectionButton")
-      svg(xmlns='http://www.w3.org/2000/svg' viewBox="0 0 68 68")
-        path(d='M6.5 6.5l55 55M61.5 6.5l-55 55')
-
-    .datepicker( :class='`${ isOpen ? "datepicker--open" : "datepicker--closed" }`')
-      .-hide-on-desktop
-        .datepicker__dummy-wrapper.datepicker__dummy-wrapper--no-border(
-          @click='toggleDatepicker' :class="`${isOpen ? 'datepicker__dummy-wrapper--is-active' : ''}`"
-          v-if='isOpen'
-        )
-          .datepicker__input(
-            tabindex="0"
-            :class="`${isOpen && checkIn == null ? 'datepicker__dummy-input--is-active' : ''}`"
-            v-text="`${checkIn ? formatDate(checkIn) : i18n['check-in']}`"
-            type="button"
-          )
-          .datepicker__input(
-            tabindex="0"
-            :class="`${isOpen && checkOut == null && checkIn !== null ? 'datepicker__dummy-input--is-active' : ''}`"
+<template>
+  <div class="datepicker__wrapper" v-if="show" v-on-click-outside="clickOutside" @blur="clickOutside">
+    <div class="datepicker__close-button -hide-on-desktop" v-if="isOpen" @click="hideDatepicker">＋</div>
+    <div class="datepicker__dummy-wrapper" :class="`${isOpen ? 'datepicker__dummy-wrapper--is-active' : ''}` ">
+      <date-input :i18n="i18n" :input-date="formatDate(checkIn)" input-date-type="check-in" 
+        :is-open="isOpen" :show-datepicker="showDatepicker" :hide-datepicker="hideDatepicker" 
+        :toggle-datepicker="toggleDatepicker" :single-day-selection="singleDaySelection">
+      </date-input>
+      <date-input v-if="!singleDaySelection" :i18n="i18n" :input-date="formatDate(checkOut)"
+        input-date-type="check-out" :is-open="isOpen" :showDatepicker="showDatepicker" 
+        :hide-datepicker="hideDatepicker" :toggle-datepicker="toggleDatepicker"
+        :single-day-selection="singleDaySelection">
+      </date-input>
+    </div>
+    <div class="datepicker__clear-button" tabindex="0" @click="clearSelection" v-if="showClearSelectionButton">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 68"><path d="M6.5 6.5l55 55M61.5 6.5l-55 55"></path></svg></div>
+    <div class="datepicker" :class="`${ isOpen ? 'datepicker--open' : 'datepicker--closed' }`">
+      <div class="-hide-on-desktop">
+        <div class="datepicker__dummy-wrapper datepicker__dummy-wrapper--no-border" @click="toggleDatepicker" 
+          :class="`${isOpen ? 'datepicker__dummy-wrapper--is-active' : ''}`" v-if="isOpen">
+          <div class="datepicker__input" tabindex="0" :class="`${isOpen && checkIn == null ? 'datepicker__dummy-input--is-active' : ''}`" 
+            v-text="`${checkIn ? formatDate(checkIn) : i18n['check-in']}`" type="button"></div>
+          <div class="datepicker__input" tabindex="0" 
+            :class="`${isOpen && checkOut == null && checkIn !== null ? 'datepicker__dummy-input--is-active' : ''}`" 
             v-text="`${checkOut ? formatDate(checkOut) : i18n['check-out']}`"
-            type="button"
-          )
-      .datepicker__inner
-        .datepicker__header
-          span.datepicker__month-button.datepicker__month-button--prev.-hide-up-to-tablet(
-            @click='renderPreviousMonth'
-            @keyup.enter.stop.prevent='renderPreviousMonth'
-            :tabindex='isOpen ? 0 : -1'
-          )
-          span.datepicker__month-button.datepicker__month-button--next.-hide-up-to-tablet(
-            @click='renderNextMonth'
-            @keyup.enter.stop.prevent='renderNextMonth'
-            :tabindex='isOpen ? 0 : -1'
-          )
-        .datepicker__months(v-if='screenSize == "desktop"')
-          div.datepicker__month(v-for='n in [0,1]'  v-bind:key='n')
-            p.datepicker__month-name(v-text='getMonth(months[activeMonthIndex+n].days[15].date)')
-            .datepicker__week-row.-hide-up-to-tablet
-              .datepicker__week-name(v-for='dayName in i18n["day-names"]' v-text='dayName')
-            .square(v-for='day in months[activeMonthIndex+n].days'
-              @mouseover='hoveringDate = day.date'
-              )
-              Day(
-                :is-open="isOpen"
-                :options="$props"
-                @day-clicked='handleDayClick($event)'
-                :date='day.date'
-                :sortedDisabledDates='sortedDisabledDates'
-                :nextDisabledDate='nextDisabledDate'
-                :activeMonthIndex='activeMonthIndex'
-                :hoveringDate='hoveringDate'
-                :tooltipMessage='tooltipMessage'
-                :dayNumber='getDay(day.date)'
-                :belongsToThisMonth='day.belongsToThisMonth'
-                :checkIn='checkIn'
-                :checkOut='checkOut'
-                :currentDateStyle='currentDateStyle'
-              )
-        div(v-if='screenSize !== "desktop" && isOpen')
-          .datepicker__week-row
-            .datepicker__week-name(
-              v-for='dayName in this.i18n["day-names"]'
-              v-text='dayName'
-            )
-          .datepicker__months#swiperWrapper
-            div.datepicker__month(
-              v-for='(a, n) in months'
-              v-bind:key='n'
-            )
-              p.datepicker__month-name(
-                v-text='getMonth(months[n].days[15].date)'
-              )
-              .datepicker__week-row.-hide-up-to-tablet
-                .datepicker__week-name(
-                  v-for='dayName in i18n["day-names"]'
-                  v-text='dayName'
-                )
-              .square(v-for='(day, index) in months[n].days'
-                @mouseover='hoveringDate = day.date'
-                @focus='hoveringDate = day.date'
-                v-bind:key='index'
-              )
-                Day(
-                  :is-open="isOpen"
-                  :options="$props"
-                  @day-clicked='handleDayClick($event)'
-                  :date='day.date'
-                  :sortedDisabledDates='sortedDisabledDates'
-                  :nextDisabledDate='nextDisabledDate'
-                  :activeMonthIndex='activeMonthIndex'
-                  :hoveringDate='hoveringDate'
-                  :tooltipMessage='tooltipMessage'
-                  :dayNumber='getDay(day.date)'
-                  :belongsToThisMonth='day.belongsToThisMonth'
-                  :checkIn='checkIn'
-                  :checkOut='checkOut'
-                  :currentDateStyle='currentDateStyle'
-                )
-            .next--mobile(
-              @click='renderNextMonth' type="button"
-            )
-
+            type="button">
+          </div>
+        </div>
+      </div>
+      <div class="datepicker__inner">
+        <div class="datepicker__header">
+          <span class="datepicker__month-button datepicker__month-button--prev -hide-up-to-tablet" 
+            @click="renderPreviousMonth" @keyup.enter.stop.prevent="renderPreviousMonth" :tabindex="isOpen ? 0 : -1">
+          </span>
+          <span class="datepicker__month-button datepicker__month-button--next -hide-up-to-tablet"
+            @click="renderNextMonth" @keyup.enter.stop.prevent="renderNextMonth" :tabindex="isOpen ? 0 : -1">
+          </span>
+        </div>
+        <div class="datepicker__months" v-if="screenSize == 'desktop'">
+          <div class="datepicker__month" v-for="n in [0,1]" v-bind:key="n">
+            <p class="datepicker__month-name" 
+              v-text="getMonth(months[activeMonthIndex+n].days[15].date)">
+            </p>
+            <div class="datepicker__week-row -hide-up-to-tablet">
+              <div class="datepicker__week-name" v-for="dayName in i18n['day-names']" v-text="dayName"></div>
+            </div>
+            <div class="square" v-for="day in months[activeMonthIndex+n].days" @mouseover="hoveringDate = day.date">
+              <Day :is-open="isOpen" :options="$props" @day-clicked="handleDayClick($event)" :date="day.date" 
+                :sortedDisabledDates="sortedDisabledDates" :nextDisabledDate="nextDisabledDate" 
+                :activeMonthIndex="activeMonthIndex" :hoveringDate="hoveringDate"
+                :tooltipMessage="tooltipMessage" :dayNumber="getDay(day.date)" 
+                :belongsToThisMonth="day.belongsToThisMonth" :checkIn="checkIn" :checkOut="checkOut" 
+                :currentDateStyle="currentDateStyle">
+              </Day>
+            </div>
+          </div>
+        </div>
+        <div v-if="screenSize !== 'desktop' && isOpen">
+          <div class="datepicker__week-row">
+            <div class="datepicker__week-name" v-for="dayName in this.i18n['day-names']" v-text="dayName"></div>
+          </div>
+          <div class="datepicker__months" id="swiperWrapper">
+            <div class="datepicker__month" v-for="(a, n) in months" v-bind:key="n">
+              <p class="datepicker__month-name" v-text="getMonth(months[n].days[15].date)"></p>
+              <div class="datepicker__week-row -hide-up-to-tablet">
+                <div class="datepicker__week-name" v-for="dayName in i18n['day-names']" v-text="dayName"></div>
+              </div>
+              <div class="square" v-for="(day, index) in months[n].days" @mouseover="hoveringDate = day.date" @focus="hoveringDate = day.date" v-bind:key="index">
+                <Day :is-open="isOpen" :options="$props" @day-clicked="handleDayClick($event)" 
+                  :date="day.date" :sortedDisabledDates="sortedDisabledDates" :nextDisabledDate="nextDisabledDate" 
+                  :activeMonthIndex="activeMonthIndex" :hoveringDate="hoveringDate"
+                  :tooltipMessage="tooltipMessage" :dayNumber="getDay(day.date)" 
+                  :belongsToThisMonth="day.belongsToThisMonth" :checkIn="checkIn" :checkOut="checkOut" 
+                  :currentDateStyle="currentDateStyle">
+                </Day>
+              </div>
+            </div>
+            <div class="next--mobile" @click="renderNextMonth" type="button"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -159,7 +115,7 @@
 
     props: {
       currentDateStyle:{
-        default:() => ({border: "1px solid #00c690"}),
+        default:() => ({ }),
       },
       value: {
         type: String
@@ -237,7 +193,7 @@
         type: Boolean
       },
       showYear: {
-        default: false,
+        default: true,
         type: Boolean
       },
       closeDatepickerOnClickOutside: {
