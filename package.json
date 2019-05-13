@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/krystalcampioni/vue-hotel-datepicker"
+    "url": "https://github.com/lionel-meaudre/vue-hotel-datepicker"
   },
   "keywords": [
     "vue",
@@ -31,9 +31,9 @@
     "date range picker"
   ],
   "bugs": {
-    "url": "https://github.com/krystalcampioni/vue-hotel-datepicker/issues"
+    "url": "https://github.com/lionel-meaudre/vue-hotel-datepicker"
   },
-  "homepage": "https://github.com/krystalcampioni/vue-hotel-datepicker",
+  "homepage": "https://github.com/lionel-meaudre/vue-hotel-datepicker",
   "devDependencies": {
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.26.3",
