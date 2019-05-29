@@ -29,10 +29,11 @@
       </div>
       <div class="datepicker__inner">
         <div class="datepicker__header">
-          <span class="datepicker__month-button datepicker__month-button--prev -hide-up-to-tablet" 
+          <span class="datepicker__month-button datepicker__month-button--prev" 
             @click="renderPreviousMonth" @keyup.enter.stop.prevent="renderPreviousMonth" :tabindex="isOpen ? 0 : -1">
           </span>
-          <span class="datepicker__month-button datepicker__month-button--next -hide-up-to-tablet"
+          <span v-text="getMonth(months[activeMonthIndex].days[15].date)" v-if="screenSize !== 'desktop'"></span>
+          <span class="datepicker__month-button datepicker__month-button--next"
             @click="renderNextMonth" @keyup.enter.stop.prevent="renderNextMonth" :tabindex="isOpen ? 0 : -1">
           </span>
         </div>
@@ -41,7 +42,7 @@
             <p class="datepicker__month-name" 
               v-text="getMonth(months[activeMonthIndex+n].days[15].date)">
             </p>
-            <div class="datepicker__week-row -hide-up-to-tablet">
+            <div class="datepicker__week-row">
               <div class="datepicker__week-name" v-for="dayName in i18n['day-names']" v-text="dayName"></div>
             </div>
             <div class="square" v-for="day in months[activeMonthIndex+n].days" @mouseover="hoveringDate = day.date">
@@ -55,27 +56,20 @@
             </div>
           </div>
         </div>
-        <div v-if="screenSize !== 'desktop' && isOpen">
-          <div class="datepicker__week-row">
-            <div class="datepicker__week-name" v-for="dayName in this.i18n['day-names']" v-text="dayName"></div>
-          </div>
-          <div class="datepicker__months" id="swiperWrapper">
-            <div class="datepicker__month" v-for="(a, n) in months" v-bind:key="n">
-              <p class="datepicker__month-name" v-text="getMonth(months[n].days[15].date)"></p>
-              <div class="datepicker__week-row -hide-up-to-tablet">
-                <div class="datepicker__week-name" v-for="dayName in i18n['day-names']" v-text="dayName"></div>
-              </div>
-              <div class="square" v-for="(day, index) in months[n].days" @mouseover="hoveringDate = day.date" @focus="hoveringDate = day.date" v-bind:key="index">
-                <Day :is-open="isOpen" :options="$props" @day-clicked="handleDayClick($event)" 
-                  :date="day.date" :sortedDisabledDates="sortedDisabledDates" :nextDisabledDate="nextDisabledDate" 
-                  :activeMonthIndex="activeMonthIndex" :hoveringDate="hoveringDate"
-                  :tooltipMessage="tooltipMessage" :dayNumber="getDay(day.date)" 
-                  :belongsToThisMonth="day.belongsToThisMonth" :checkIn="checkIn" :checkOut="checkOut" 
-                  :currentDateStyle="currentDateStyle">
-                </Day>
-              </div>
+        <div class="datepicker__week-row" v-if="screenSize !== 'desktop'">
+          <div class="datepicker__week-name" v-for="dayName in i18n['day-names']" v-text="dayName"></div>
+        </div>
+        <div class="datepicker__months" v-if="screenSize !== 'desktop'">
+          <div class="datepicker__month">
+            <div class="square" v-for="day in months[activeMonthIndex].days" @mouseover="hoveringDate = day.date">
+              <Day :is-open="isOpen" :options="$props" @day-clicked="handleDayClick($event)" :date="day.date" 
+                :sortedDisabledDates="sortedDisabledDates" :nextDisabledDate="nextDisabledDate" 
+                :activeMonthIndex="activeMonthIndex" :hoveringDate="hoveringDate"
+                :tooltipMessage="tooltipMessage" :dayNumber="getDay(day.date)" 
+                :belongsToThisMonth="day.belongsToThisMonth" :checkIn="checkIn" :checkOut="checkOut" 
+                :currentDateStyle="currentDateStyle">
+              </Day>
             </div>
-            <div class="next--mobile" @click="renderNextMonth" type="button"></div>
           </div>
         </div>
       </div>
