@@ -28,12 +28,12 @@
         </div>
       </div>
       <div class="datepicker__inner">
-        <div class="datepicker__header">
-          <span class="datepicker__month-button datepicker__month-button--prev" 
+        <div class="datepicker__header d-flex justify-content-between">
+          <span class="datepicker__month-button datepicker__month-button--prev c-marg-ls" 
             @click="renderPreviousMonth" @keyup.enter.stop.prevent="renderPreviousMonth" :tabindex="isOpen ? 0 : -1">
           </span>
-          <span v-text="getMonth(months[activeMonthIndex].days[15].date)" v-if="screenSize !== 'desktop'"></span>
-          <span class="datepicker__month-button datepicker__month-button--next"
+          <span class="align-self-center" v-text="getMonth(months[activeMonthIndex].days[15].date)" v-if="screenSize !== 'desktop'"></span>
+          <span class="datepicker__month-button datepicker__month-button--next c-marg-rs"
             @click="renderNextMonth" @keyup.enter.stop.prevent="renderNextMonth" :tabindex="isOpen ? 0 : -1">
           </span>
         </div>
