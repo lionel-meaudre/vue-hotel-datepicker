@@ -200,7 +200,9 @@ export default {
     },
     checkIn(date) {
       this.createAllowedCheckoutDays(date);
-    }
+      this.checkIfDisabled();
+      this.checkIfHighlighted();
+    },
   },
 
   methods: {

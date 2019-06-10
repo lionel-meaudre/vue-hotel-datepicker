@@ -186,6 +186,14 @@
         default: false,
         type: Boolean
       },
+      checkOutSelection: {
+        default: false,
+        type: Boolean
+      },
+      checkInSelection: {
+        default: false,
+        type: Boolean
+      },
       showYear: {
         default: true,
         type: Boolean
@@ -244,7 +252,9 @@
         }
       },
       checkIn(newDate) {
-        this.$emit("check-in-changed", newDate)
+        if(this.checkOutSelection == false){
+          this.$emit("check-in-changed", newDate)
+        }
       },
       checkOut(newDate) {
 
@@ -259,7 +269,9 @@
 
         this.$emit("check-out-changed", newDate)
       },
-
+      startingDateValue(newDate){
+        this.checkIn = newDate;
+      },
     },
 
     methods: {
@@ -350,11 +362,14 @@
 
         if (this.checkIn == null && this.singleDaySelection == false) {
           this.checkIn = event.date;
-        } else if (this.singleDaySelection == true) {
+        } else if (this.singleDaySelection == true || this.checkInSelection == true) {
           this.checkIn = event.date
           this.checkOut = event.date
         }
         else if (this.checkIn !== null && this.checkOut == null) {
+          this.checkOut = event.date;
+        }
+        else if(this.checkOutSelection == true ){
           this.checkOut = event.date;
         }
         else {
