@@ -27,6 +27,7 @@
           </div>
         </div>
       </div>
+      <div class="datepicker-title" v-html="datePickerTitle"></div>
       <div class="datepicker__inner">
         <div class="datepicker__header d-flex justify-content-between">
           <span class="datepicker__month-button datepicker__month-button--prev c-marg-ls" 
@@ -110,6 +111,12 @@
     props: {
       currentDateStyle:{
         default:() => ({ }),
+      },
+      startDateTitle: {
+        type: String
+      },
+      endDateTitle: {
+        type: String
       },
       value: {
         type: String
@@ -231,6 +238,13 @@
       showClearSelectionButton() {
         return Boolean((this.checkIn || this.checkOut) && this.displayClearButton);
       },
+
+      datePickerTitle(){
+        if(this.checkIn !== null && this.checkOut === null){
+          return this.endDateTitle;
+        }
+        return this.startDateTitle;
+      }
     },
 
     watch: {
