@@ -850,12 +850,18 @@
         }
 
         &__inner {
-            padding: 20px;
-            float: left;
+            margin: 10px 20px;
+            position: relative;
 
             @include device($up-to-tablet) {
                 padding: 0;
             }
+        }
+
+        &__header {
+            width: 100%;
+            top: 0;
+            left: 0;
         }
 
         &__months {
@@ -864,14 +870,7 @@
             }
 
             @include device($up-to-tablet) {
-                margin-top: 92px;
-                height: calc(100% - 92px);
-                position: absolute;
-                left: 0;
-                top: 0;
                 overflow: scroll;
-                right: 0;
-                bottom: 0;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
@@ -902,11 +901,6 @@
             @include device($up-to-tablet) {
                 width: 100%;
                 padding-right: 0;
-                padding-top: 60px;
-
-                &:last-of-type {
-                    margin-bottom: 65px;
-                }
             }
 
             @include device($desktop) {
@@ -925,8 +919,7 @@
         &__month-name {
             font-size: 16px;
             font-weight: 500;
-            margin-top: -40px;
-            padding-bottom: 17px;
+            padding: 15px 0!important;
             pointer-events: none;
             text-align: center;
 
@@ -949,11 +942,6 @@
 
             @include device($up-to-tablet) {
                 box-shadow: 0 13px 18px -8px rgba($black, .07);
-                height: 25px;
-                left: 0;
-                top: 65px;
-                position: absolute;
-                width: 100%;
             }
         }
 
