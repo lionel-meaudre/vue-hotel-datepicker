@@ -167,6 +167,12 @@
         },
         type: Array
       },
+      rotations: {
+        default: function () {
+          return null
+        },
+        type: Object
+      },
       allowedRanges: {
         default: function () {
           return []

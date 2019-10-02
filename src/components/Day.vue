@@ -255,6 +255,61 @@ export default {
       }
     },
 
+    checkIfDisabledInRotation() {
+
+      //console.log('ROTATION');
+      //console.log(fecha.format(this.date, 'dddd'));
+
+      if(this.options.rotations === undefined){
+        return false;
+      }
+      if(this.options.rotations === null){
+        return false;
+      }
+
+      //end date
+      if(this.checkIn !== null && this.checkOut === null){
+
+        if(this.options.rotations.rotationReturn === undefined){
+          return false;
+        }
+
+        //not in rotation period
+        if(!this.options.rotations.rotationReturn.some((i) => this.compareDay(this.date, i.rotationStartingDate) == 1 
+          && this.compareDay(this.date, i.rotationEndingDate) == -1)){
+            return true;
+        }
+
+        var rotationReturn = this.options.rotations.rotationReturn.filter((i) => this.compareDay(this.date, i.rotationStartingDate) == 1 
+          && this.compareDay(this.date, i.rotationEndingDate) == -1)[0];
+
+        //in rotation period but not an allowed day
+        if(!rotationReturn.rotationDays.some((i) => i == fecha.format(this.date, 'dddd'))){
+            return true;
+        }
+      }
+      else{ //start date
+
+        if(this.options.rotations.rotationDeparture === undefined){
+          return false;
+        }
+
+        //not in rotation period
+        if(!this.options.rotations.rotationDeparture.some((i) => this.compareDay(this.date, i.rotationStartingDate) == 1 
+          && this.compareDay(this.date, i.rotationEndingDate) == -1)){
+            return true;
+        }
+
+        var rotationDeparture = this.options.rotations.rotationDeparture.filter((i) => this.compareDay(this.date, i.rotationStartingDate) == 1 
+          && this.compareDay(this.date, i.rotationEndingDate) == -1)[0];
+
+        //in rotation period but not an allowed day
+        if(!rotationDeparture.rotationDays.some((i) => i == fecha.format(this.date, 'dddd'))){
+            return true;
+        }
+      }
+    },
+
     checkIfDisabled() {
       this.isDisabled =
         // If this day is equal any of the disabled dates
@@ -267,8 +322,9 @@ export default {
         || this.compareEndDay()
         // Or is in one of the disabled days of the week
         || this.options.disabledDaysOfWeek.some((i) =>
-          i == fecha.format(this.date, 'dddd')
-        );
+          i == fecha.format(this.date, 'dddd'))
+        // Or is on of the disabled days in the rotation
+        || this.checkIfDisabledInRotation();
         // Handle checkout enabled
         if ( this.options.enableCheckout ) {
           if ( this.compareDay(this.date, this.checkIn) == 1 &&
