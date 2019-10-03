@@ -275,17 +275,19 @@ export default {
         }
 
         if(this.options.rotations.rotationReturn.length === 0){
-          return false;
+          return true;
         }
 
         //not in rotation period
-        if(!this.options.rotations.rotationReturn.some((i) => this.compareDay(this.date, i.rotationStartingDate) == 1 
-          && this.compareDay(this.date, i.rotationEndingDate) == -1)){
+        if(!this.options.rotations.rotationReturn.some((i) => 
+          (this.compareDay(this.date, i.rotationStartingDate) == 1 ||  this.compareDay(this.date, i.rotationStartingDate) == 0) &&
+          (this.compareDay(this.date, i.rotationEndingDate) == -1 && this.compareDay(this.date, i.rotationEndingDate) == 0))){
             return true;
         }
 
-        var rotationReturn = this.options.rotations.rotationReturn.filter((i) => this.compareDay(this.date, i.rotationStartingDate) == 1 
-          && this.compareDay(this.date, i.rotationEndingDate) == -1)[0];
+        var rotationReturn = this.options.rotations.rotationReturn.filter((i) => 
+          (this.compareDay(this.date, i.rotationStartingDate) == 1 || this.compareDay(this.date, i.rotationStartingDate) == 0) &&
+          (this.compareDay(this.date, i.rotationEndingDate) == -1 && this.compareDay(this.date, i.rotationEndingDate) == 0))[0];
 
         //in rotation period but not an allowed day
         if(!rotationReturn.rotationDays.some((i) => i == fecha.format(this.date, 'dddd'))){
@@ -299,17 +301,19 @@ export default {
         }
 
         if(this.options.rotations.rotationDeparture.length === 0){
-          return false;
+          return true;
         }
 
         //not in rotation period
-        if(!this.options.rotations.rotationDeparture.some((i) => this.compareDay(this.date, i.rotationStartingDate) == 1 
-          && this.compareDay(this.date, i.rotationEndingDate) == -1)){
+        if(!this.options.rotations.rotationDeparture.some((i) => 
+          (this.compareDay(this.date, i.rotationStartingDate) == 1 || this.compareDay(this.date, i.rotationStartingDate) == 0) && 
+          (this.compareDay(this.date, i.rotationEndingDate) == -1) || this.compareDay(this.date, i.rotationEndingDate) == 0)){
             return true;
         }
 
-        var rotationDeparture = this.options.rotations.rotationDeparture.filter((i) => this.compareDay(this.date, i.rotationStartingDate) == 1 
-          && this.compareDay(this.date, i.rotationEndingDate) == -1)[0];
+        var rotationDeparture = this.options.rotations.rotationDeparture.filter((i) => 
+          (this.compareDay(this.date, i.rotationStartingDate) == 1 || this.compareDay(this.date, i.rotationStartingDate) == 0) && 
+          (this.compareDay(this.date, i.rotationEndingDate) == -1 || this.compareDay(this.date, i.rotationEndingDate) == 0))[0];
 
         //in rotation period but not an allowed day
         if(!rotationDeparture.rotationDays.some((i) => i == fecha.format(this.date, 'dddd'))){
