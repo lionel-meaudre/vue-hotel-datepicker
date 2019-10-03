@@ -281,13 +281,13 @@ export default {
         //not in rotation period
         if(!this.options.rotations.rotationReturn.some((i) => 
           (this.compareDay(this.date, i.rotationStartingDate) == 1 ||  this.compareDay(this.date, i.rotationStartingDate) == 0) &&
-          (this.compareDay(this.date, i.rotationEndingDate) == -1 && this.compareDay(this.date, i.rotationEndingDate) == 0))){
+          (this.compareDay(this.date, i.rotationEndingDate) == -1 || this.compareDay(this.date, i.rotationEndingDate) == 0))){
             return true;
         }
 
         var rotationReturn = this.options.rotations.rotationReturn.filter((i) => 
           (this.compareDay(this.date, i.rotationStartingDate) == 1 || this.compareDay(this.date, i.rotationStartingDate) == 0) &&
-          (this.compareDay(this.date, i.rotationEndingDate) == -1 && this.compareDay(this.date, i.rotationEndingDate) == 0))[0];
+          (this.compareDay(this.date, i.rotationEndingDate) == -1 || this.compareDay(this.date, i.rotationEndingDate) == 0))[0];
 
         //in rotation period but not an allowed day
         if(!rotationReturn.rotationDays.some((i) => i == fecha.format(this.date, 'dddd'))){
