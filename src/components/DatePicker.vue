@@ -283,7 +283,7 @@
           this.nextDisabledDate = null;
           this.show = true;
           this.parseDisabledDates();
-          this.reRender()
+          this.reRender();
           this.isOpen = false;
         }
 
@@ -292,6 +292,9 @@
       startingDateValue(newDate){
         this.checkIn = newDate;
       },
+      rotations(){//needs to refresh calendarwhen rotations are updated
+        this.reRender();
+      }
     },
 
     methods: {
