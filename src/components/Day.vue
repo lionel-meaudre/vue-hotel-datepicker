@@ -274,6 +274,10 @@ export default {
           return false;
         }
 
+        if(this.options.rotations.rotationReturn.length === 0){
+          return false;
+        }
+
         //not in rotation period
         if(!this.options.rotations.rotationReturn.some((i) => this.compareDay(this.date, i.rotationStartingDate) == 1 
           && this.compareDay(this.date, i.rotationEndingDate) == -1)){
@@ -291,6 +295,10 @@ export default {
       else{ //start date
 
         if(this.options.rotations.rotationDeparture === undefined){
+          return false;
+        }
+
+        if(this.options.rotations.rotationDeparture.length === 0){
           return false;
         }
 
