@@ -150,14 +150,14 @@ export default {
             ( fecha.format(this.checkIn, 'YYYYMMDD') == fecha.format(this.date, 'YYYYMMDD') )
           ) {
           if (this.options.minNights == 0) {
-            return "datepicker__month-day--first-day-selected"
+            return "datepicker__month-day--first-day-selected c-bg-fe5101"
           } else {
-            return "datepicker__month-day--first-day-selected"
+            return "datepicker__month-day--first-day-selected c-bg-fe5101"
           }
         }
         if ( this.checkOut !== null ) {
           if ( fecha.format(this.checkOut, 'YYYYMMDD') == fecha.format(this.date, 'YYYYMMDD') ) {
-            return "datepicker__month-day--last-day-selected"
+            return "datepicker__month-day--last-day-selected c-bg-fe5101"
           }
         }
         // Only highlight dates that are not disabled

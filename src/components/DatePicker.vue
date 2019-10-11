@@ -27,7 +27,7 @@
           </div>
         </div>
       </div>
-      <div class="datepicker-title" v-html="datePickerTitle"></div>
+      <div class="datepicker-title c-txt-or" v-html="datePickerTitle"></div>
       <div class="datepicker__inner">
         <div class="datepicker__header d-flex justify-content-between">
           <span class="datepicker__month-button datepicker__month-button--prev c-marg-ls" 
@@ -44,7 +44,7 @@
               v-text="getMonth(months[activeMonthIndex+n].days[15].date)">
             </p>
             <div class="datepicker__week-row">
-              <div class="datepicker__week-name" v-for="dayName in i18n['day-names']" v-text="dayName"></div>
+              <div class="datepicker__week-name c-txt-yel" v-for="dayName in i18n['day-names']" v-text="dayName"></div>
             </div>
             <div class="square" v-for="day in months[activeMonthIndex+n].days" @mouseover="hoveringDate = day.date">
               <Day :is-open="isOpen" :options="$props" @day-clicked="handleDayClick($event)" :date="day.date" 
@@ -58,7 +58,7 @@
           </div>
         </div>
         <div class="datepicker__week-row" v-if="screenSize !== 'desktop'">
-          <div class="datepicker__week-name" v-for="dayName in i18n['day-names']" v-text="dayName"></div>
+          <div class="datepicker__week-name c-txt-yel" v-for="dayName in i18n['day-names']" v-text="dayName"></div>
         </div>
         <div class="datepicker__months" v-if="screenSize !== 'desktop'">
           <div class="datepicker__month">
@@ -792,19 +792,6 @@
                 position: relative;
             }
 
-            &--selected {
-                background-color: rgba($primary-color, .5);
-                color: $white;
-
-                &:hover {
-                    background-color: $white;
-                    color: $primary-color;
-                    z-index: 1;
-                    position: relative;
-                    box-shadow: 0 0 10px 3px rgba($gray, .4);
-                }
-            }
-
             &--first-day-selected,
             &--last-day-selected {
                 background: $primary-color;
@@ -959,7 +946,6 @@
             float: left;
             font-size: 12px;
             font-weight: 400;
-            color: $medium-gray;
             text-align: center;
         }
 
