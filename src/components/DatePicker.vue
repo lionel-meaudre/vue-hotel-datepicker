@@ -39,7 +39,7 @@
           </span>
         </div>
         <div class="datepicker__months" v-if="screenSize == 'desktop'">
-          <div class="datepicker__month" v-for="n in [0,1]" v-bind:key="n">
+          <div class="datepicker__month" id="swiperWrapper" v-for="n in [0,1]" v-bind:key="n">
             <p class="datepicker__month-name" 
               v-text="getMonth(months[activeMonthIndex+n].days[15].date)">
             </p>
@@ -61,7 +61,7 @@
           <div class="datepicker__week-name c-txt-yel" v-for="dayName in i18n['day-names']" v-text="dayName"></div>
         </div>
         <div class="datepicker__months" v-if="screenSize !== 'desktop'">
-          <div class="datepicker__month">
+          <div class="datepicker__month" id="swiperWrapper">
             <div class="square" v-for="day in months[activeMonthIndex].days" @mouseover="hoveringDate = day.date">
               <Day :is-open="isOpen" :options="$props" @day-clicked="handleDayClick($event)" :date="day.date" 
                 :sortedDisabledDates="sortedDisabledDates" :nextDisabledDate="nextDisabledDate" 
