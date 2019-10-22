@@ -778,7 +778,6 @@
 
             &--valid:hover,
             &--allowed-checkout:hover {
-                background-color: $white;
                 color: $primary-color;
                 z-index: 1;
                 position: relative;
@@ -794,7 +793,6 @@
 
             &--first-day-selected,
             &--last-day-selected {
-                background: $primary-color;
                 color: $white;
             }
 
