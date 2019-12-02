@@ -294,6 +294,10 @@
       },
       rotations(){//needs to refresh calendarwhen rotations are updated
         this.reRender();
+      },
+      startDate(){//needs to refresh calendar when rotations are updated
+        this.buildCalendar();
+        this.reRender();
       }
     },
 
@@ -485,42 +489,52 @@
         sortedDates.sort((a, b) => a - b);
 
         this.sortedDisabledDates = sortedDates;
-      }
-    },
+      },
 
-    beforeMount() {
-      fecha.i18n = {
-        dayNames: this.i18n['day-names'],
-        dayNamesShort: this.shortenString(this.i18n['day-names'], 3),
-        monthNames: this.i18n['month-names'],
-        monthNamesShort: this.shortenString(this.i18n['month-names'], 3),
-        amPm: ['am', 'pm'],
-        // D is the day of the month, function returns something like...  3rd or 11th
-        DoFn: function (D) {
-          return D + ['th', 'st', 'nd', 'rd'][D % 10 > 3 ? 0 : (D - D % 10 !== 10) * D % 10];
-        }
-      };
-        if(this.checkIn &&
-        (this.getMonthDiff(this.getNextMonth(new Date(this.startDate)), this.checkIn) > 0 ||
-        this.getMonthDiff(this.startDate, this.checkIn) > 0)){
+      buildCalendar() {
+
+        this.months = [];
+
+        if(this.checkIn && (this.getMonthDiff(this.getNextMonth(new Date(this.startDate)), this.checkIn) > 0 || this.getMonthDiff(this.startDate, this.checkIn) > 0)) {
           this.createMonth(new Date(this.startDate));
+          
           const count = this.getMonthDiff(this.startDate, this.checkIn)
           let nextMonth = new Date(this.startDate)
+          
           for(let i = 0; i <= count; i++){
             let tempNextMonth = this.getNextMonth(nextMonth)
             this.createMonth(tempNextMonth)
             nextMonth = tempNextMonth
           }
+          
           if(this.checkOut && this.getMonthDiff(this.checkIn,this.checkOut) > 0){
             this.createMonth(this.getNextMonth(nextMonth))
             this.activeMonthIndex = 1
           }
+          
           this.activeMonthIndex += count
-      }else{
-        this.createMonth(new Date(this.startDate));
-        this.createMonth(this.getNextMonth(new Date(this.startDate)));
+        }
+        else {
+          this.createMonth(new Date(this.startDate));
+          this.createMonth(this.getNextMonth(new Date(this.startDate)));
+        }
+        this.parseDisabledDates();
       }
-      this.parseDisabledDates();
+    },
+
+    beforeMount() {
+      fecha.i18n = {
+          dayNames: this.i18n['day-names'],
+          dayNamesShort: this.shortenString(this.i18n['day-names'], 3),
+          monthNames: this.i18n['month-names'],
+          monthNamesShort: this.shortenString(this.i18n['month-names'], 3),
+          amPm: ['am', 'pm'],
+          // D is the day of the month, function returns something like...  3rd or 11th
+          DoFn: function (D) {
+            return D + ['th', 'st', 'nd', 'rd'][D % 10 > 3 ? 0 : (D - D % 10 !== 10) * D % 10];
+          }
+        };
+        this.buildCalendar();
     },
 
     mounted() {
